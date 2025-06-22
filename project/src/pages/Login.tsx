@@ -1,71 +1,123 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
-import { LogIn, User, Lock } from 'lucide-react';
+import { LogIn, Mail, Lock } from 'lucide-react';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useAdStore } from '../store/useAdStore';
+
+const loginSchema = z.object({
+  email: z.string().email({ message: 'Lütfen geçerli bir e-posta adresi girin.' }),
+  password: z.string().min(1, { message: 'Şifre alanı boş bırakılamaz.' }),
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
 
 export const Login: React.FC = () => {
-  const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
-  const [error, setError] = useState('');
+  const loginUser = useAdStore((state) => state.loginUser);
 
-  const onSubmit = (data: any) => {
-    // Mock giriş kontrolü
-    if (data.username === 'eray' && data.password === '123') {
-      localStorage.setItem('isLoggedIn', 'true');
-      toast.success('Giriş başarılı!');
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  const onSubmit = async (data: LoginFormValues) => {
+    await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
+    const success = loginUser(data);
+
+    if (success) {
+      toast.success('Giriş başarılı! Hoş geldiniz.');
       navigate('/');
     } else {
-      toast.error('Kullanıcı adı veya şifre yanlış!');
-      setError('Kullanıcı adı veya şifre yanlış');
+      setError('root', {
+        type: 'manual',
+        message: 'E-posta veya şifre hatalı. Lütfen tekrar deneyin.',
+      });
     }
   };
 
   return (
-    <div className="animate-fade-in">
-      <div className="w-full max-w-md p-8 space-y-8 bg-white dark:bg-gray-800/50 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-700">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-violet-600 to-amber-500 bg-clip-text text-transparent">
-            Tekrar Hoş Geldin!
-          </h2>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">Giriş yap ve yeni maceralara atıl.</p>
+    <div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
+      <div className="animate-fade-in">
+        <div className="w-full max-w-md p-8 space-y-8 bg-white dark:bg-gray-800/50 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-700">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-violet-600 to-amber-500 bg-clip-text text-transparent">
+              Tekrar Hoş Geldin!
+            </h2>
+            <p className="mt-2 text-gray-600 dark:text-gray-400">Giriş yap ve yeni maceralara atıl.</p>
+          </div>
+          <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
+            <div>
+              <div className="relative">
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-violet-400 w-5 h-5" />
+                <input
+                  {...register('email')}
+                  type="email"
+                  className={`w-full pl-12 pr-4 py-3 border rounded-xl bg-white dark:bg-gray-700/50 focus:ring-2 transition ${
+                    errors.email ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 dark:border-gray-600 focus:ring-indigo-500 dark:focus:ring-indigo-400'
+                  }`}
+                  placeholder="E-posta Adresi"
+                />
+              </div>
+              {errors.email && <p className="text-red-500 text-xs mt-1 ml-1">{errors.email.message}</p>}
+            </div>
+            <div>
+              <div className="relative">
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-violet-400 w-5 h-5" />
+                <input
+                  {...register('password')}
+                  type="password"
+                  className={`w-full pl-12 pr-4 py-3 border rounded-xl bg-white dark:bg-gray-700/50 focus:ring-2 transition ${
+                    errors.password ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 dark:border-gray-600 focus:ring-indigo-500 dark:focus:ring-indigo-400'
+                  }`}
+                  placeholder="Şifre"
+                />
+              </div>
+              {errors.password && <p className="text-red-500 text-xs mt-1 ml-1">{errors.password.message}</p>}
+            </div>
+
+            {errors.root && (
+              <div className="text-center text-sm text-red-500 p-2 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                {errors.root.message}
+              </div>
+            )}
+
+            <div>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-violet-600 to-amber-500 text-white px-8 py-3 rounded-xl font-semibold text-lg hover:shadow-lg hover:scale-105 transition disabled:opacity-75 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Giriş Yapılıyor...
+                  </>
+                ) : (
+                  <>
+                    <LogIn className="w-5 h-5" /> Giriş Yap
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
+          <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+            Hesabın yok mu?{' '}
+            <Link to="/kayit" className="font-medium text-violet-600 dark:text-violet-400 hover:underline">
+              Hemen Kaydol
+            </Link>
+          </p>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
-          <div className="relative">
-            <User className="absolute left-4 top-1/2 -translate-y-1/2 text-violet-400 w-5 h-5" />
-            <input
-              {...register('username')}
-              type="text"
-              className="w-full pl-12 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700/50 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400"
-              placeholder="Kullanıcı Adı"
-            />
-          </div>
-          <div className="relative">
-            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-violet-400 w-5 h-5" />
-            <input
-              {...register('password')}
-              type="password"
-              className="w-full pl-12 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700/50 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400"
-              placeholder="Şifre"
-            />
-          </div>
-          {error && <p className="text-sm text-red-500 text-center">{error}</p>}
-          <div>
-            <button
-              type="submit"
-              className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-violet-600 to-amber-500 text-white px-8 py-3 rounded-xl font-semibold text-lg hover:shadow-lg hover:scale-105 transition"
-            >
-              <LogIn className="w-5 h-5" /> Giriş Yap
-            </button>
-          </div>
-        </form>
-        <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-          Hesabın yok mu?{' '}
-          <Link to="/kayit" className="font-medium text-violet-600 dark:text-violet-400 hover:underline">
-            Hemen Kaydol
-          </Link>
-        </p>
       </div>
     </div>
   );
-}; 
+};

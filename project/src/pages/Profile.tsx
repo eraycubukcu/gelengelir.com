@@ -2,21 +2,29 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAdStore } from '../store/useAdStore';
 import { AdCard } from '../components/AdCard';
-import { Mail, User, Info, Instagram, Twitter } from 'lucide-react';
+import { Mail, User, Info, Instagram, Twitter, Loader2 } from 'lucide-react';
 
 export const Profile: React.FC = () => {
-  const { currentUser: user, getUpcomingEvents, getPastEvents, getMyAds } = useAdStore((state) => ({
+  const { currentUser, getUpcomingEvents, getPastEvents, getMyAds } = useAdStore((state) => ({
     currentUser: state.currentUser,
     getUpcomingEvents: state.getUpcomingEvents,
     getPastEvents: state.getPastEvents,
     getMyAds: state.getMyAds,
   }));
 
+  const [tab, setTab] = useState<'upcoming' | 'past' | 'myads'>('upcoming');
+
+  if (!currentUser) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loader2 className="w-12 h-12 text-violet-500 animate-spin" />
+      </div>
+    );
+  }
+  
   const upcomingEvents = getUpcomingEvents();
   const pastEvents = getPastEvents();
   const myAds = getMyAds();
-
-  const [tab, setTab] = useState<'upcoming' | 'past' | 'myads'>('upcoming');
 
   // İstatistikler ve rozetler
   const joinedCount = upcomingEvents.length + pastEvents.length;
@@ -32,11 +40,11 @@ export const Profile: React.FC = () => {
       {/* Profil Kartı */}
       <div className="w-full max-w-2xl bg-white dark:bg-gray-800/50 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-700 p-8 flex flex-col items-center mb-10 relative overflow-visible mt-8">
         <div className="absolute -top-12">
-          <img src={user.avatar} alt="Profil" className="w-28 h-28 rounded-full border-4 border-violet-400 dark:border-violet-500 shadow-xl bg-white" />
+          <img src={currentUser.avatar} alt="Profil" className="w-28 h-28 rounded-full border-4 border-violet-400 dark:border-violet-500 shadow-xl bg-white" />
         </div>
         <div className="mt-20 w-full flex flex-col items-center">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-violet-600 to-amber-500 bg-clip-text text-transparent mb-2">Profilin</h1>
-          <p className="text-gray-500 dark:text-gray-400 mb-4">Hoş geldin, <span className="font-semibold text-gray-700 dark:text-gray-200">{user.name}</span>!</p>
+          <p className="text-gray-500 dark:text-gray-400 mb-4">Hoş geldin, <span className="font-semibold text-gray-700 dark:text-gray-200">{currentUser.name}</span>!</p>
           {/* İstatistikler */}
           <div className="flex gap-6 mb-4">
             <div className="flex flex-col items-center">
@@ -59,14 +67,14 @@ export const Profile: React.FC = () => {
             ))}
           </div>
           <div className="flex flex-col gap-2 w-full max-w-xs mx-auto mb-4">
-            <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300"><User className="w-5 h-5 text-violet-500" /> <span className="font-medium">{user.name}</span></div>
-            <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300"><Mail className="w-5 h-5 text-violet-500" /> <span>{user.email}</span></div>
-            <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300"><Info className="w-5 h-5 text-violet-500" /> <span>{user.bio}</span></div>
+            <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300"><User className="w-5 h-5 text-violet-500" /> <span className="font-medium">{currentUser.name}</span></div>
+            <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300"><Mail className="w-5 h-5 text-violet-500" /> <span>{currentUser.email}</span></div>
+            <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300"><Info className="w-5 h-5 text-violet-500" /> <span>{currentUser.bio}</span></div>
           </div>
           <div className="flex gap-4 mb-6">
-            <a href={`mailto:${user.email}`} className="text-gray-400 dark:text-gray-500 hover:text-violet-600 dark:hover:text-violet-400" title="Mail"><Mail className="w-6 h-6" /></a>
-            <a href={`https://instagram.com/${user.instagram}`} target="_blank" rel="noopener noreferrer" className="text-gray-400 dark:text-gray-500 hover:text-pink-500 dark:hover:text-pink-400" title="Instagram"><Instagram className="w-6 h-6" /></a>
-            <a href={`https://twitter.com/${user.twitter}`} target="_blank" rel="noopener noreferrer" className="text-gray-400 dark:text-gray-500 hover:text-sky-500 dark:hover:text-sky-400" title="Twitter"><Twitter className="w-6 h-6" /></a>
+            <a href={`mailto:${currentUser.email}`} className="text-gray-400 dark:text-gray-500 hover:text-violet-600 dark:hover:text-violet-400" title="Mail"><Mail className="w-6 h-6" /></a>
+            <a href={`https://instagram.com/${currentUser.instagram}`} target="_blank" rel="noopener noreferrer" className="text-gray-400 dark:text-gray-500 hover:text-pink-500 dark:hover:text-pink-400" title="Instagram"><Instagram className="w-6 h-6" /></a>
+            <a href={`https://twitter.com/${currentUser.twitter}`} target="_blank" rel="noopener noreferrer" className="text-gray-400 dark:text-gray-500 hover:text-sky-500 dark:hover:text-sky-400" title="Twitter"><Twitter className="w-6 h-6" /></a>
           </div>
           <Link to="/profil-duzenle" className="inline-flex items-center gap-2 bg-gradient-to-r from-violet-600 to-amber-500 text-white px-6 py-2 rounded-lg font-semibold shadow hover:scale-105 transition">
             <User className="w-5 h-5" /> Profili Düzenle

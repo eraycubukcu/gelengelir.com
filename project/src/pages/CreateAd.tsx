@@ -1,11 +1,24 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Calendar, Clock, MapPin, Users, Tag } from 'lucide-react';
+import { Plus, Calendar, Clock, MapPin, Users, Tag, Loader2 } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import { useAdStore } from '../store/useAdStore';
-import { CreateAdForm } from '../types';
 import { toast } from 'react-hot-toast';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { CreateAdForm } from '../types';
+
+const createAdSchema = z.object({
+  title: z.string().min(5, { message: 'Başlık en az 5 karakter olmalıdır.' }),
+  categoryId: z.string({ required_error: 'Lütfen bir kategori seçin.' }),
+  description: z.string().min(20, { message: 'Açıklama en az 20 karakter olmalıdır.' }),
+  location: z.string().min(3, { message: 'Konum zorunludur.' }),
+  date: z.string().refine((val) => !isNaN(Date.parse(val)), { message: 'Geçerli bir tarih seçin.' }),
+  time: z.string().optional(),
+  maxParticipants: z.coerce.number().min(2, { message: 'En az 2 katılımcı olmalıdır.' }),
+  tags: z.array(z.string()).optional(),
+});
 
 export const CreateAd: React.FC = () => {
   const navigate = useNavigate();
@@ -14,40 +27,44 @@ export const CreateAd: React.FC = () => {
     addAd: state.addAd,
     currentUser: state.currentUser,
   }));
-  
+
   const {
     register,
     handleSubmit,
     watch,
     setValue,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting },
   } = useForm<CreateAdForm>({
+    resolver: zodResolver(createAdSchema),
     defaultValues: {
       maxParticipants: 2,
-      tags: []
-    }
+      tags: [],
+    },
   });
+
+  if (!currentUser) {
+    return (
+      <div className="flex justify-center items-center h-full">
+        <Loader2 className="w-12 h-12 text-violet-500 animate-spin" />
+      </div>
+    );
+  }
 
   const selectedCategoryId = watch('categoryId');
   const currentTags = watch('tags') || [];
 
   const onSubmit = async (data: CreateAdForm) => {
-    const selectedCategory = categories.find(c => c.id === data.categoryId);
-    if (!selectedCategory) return;
+    const selectedCategory = categories.find((c) => c.id === data.categoryId);
+    if (!selectedCategory) return; // Should not happen with zod
+
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     addAd({
       ...data,
-      authorName: currentUser.name,
-      authorContact: currentUser.email,
-      authorAvatar: currentUser.avatar,
       category: selectedCategory,
-      currentParticipants: 1,
-      tags: data.tags || []
     });
     toast.success('İlan başarıyla oluşturuldu!');
-    setTimeout(() => {
-      navigate('/');
-    }, 1200);
+    navigate('/');
   };
 
   const addTag = (tag: string) => {
@@ -238,7 +255,7 @@ export const CreateAd: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-violet-600 to-amber-500 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-lg hover:scale-105 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-violet-600 to-amber-500 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-lg hover:scale-105 transition disabled:opacity-75 disabled:cursor-not-allowed"
                 >
                   <Plus /> {isSubmitting ? 'Oluşturuluyor...' : 'İlanı Oluştur'}
                 </button>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Calendar, Clock, MapPin, Users, Tag, MessageCircle } from 'lucide-react';
 import { Advertisement } from '../types';
 import { format } from 'date-fns';
@@ -11,6 +12,7 @@ interface AdCardProps {
 }
 
 export const AdCard: React.FC<AdCardProps> = ({ ad }) => {
+  const navigate = useNavigate();
   const { joinAd, joinedAdIds, currentUser } = useAdStore((state) => ({
     joinAd: state.joinAd,
     joinedAdIds: state.joinedAdIds,
@@ -18,7 +20,7 @@ export const AdCard: React.FC<AdCardProps> = ({ ad }) => {
   }));
   const isFullyBooked = ad.currentParticipants >= ad.maxParticipants;
   const isJoined = joinedAdIds.includes(ad.id);
-  const isMyAd = ad.authorContact === currentUser.email;
+  const isMyAd = currentUser ? ad.authorContact === currentUser.email : false;
 
   const [comments, setComments] = useState([
     { name: 'Ayşe', text: 'Harika bir fikir! Ben de geliyorum.' },
@@ -28,10 +30,42 @@ export const AdCard: React.FC<AdCardProps> = ({ ad }) => {
   const [showComments, setShowComments] = useState(false);
 
   const handleJoin = () => {
+    if (!currentUser) {
+      toast(
+        (t) => (
+          <div className="flex flex-col items-center gap-2 text-center">
+            <span>Bu ilana katılmak için giriş yapmalısınız.</span>
+            <div className="w-full flex gap-2 mt-2">
+              <button
+                onClick={() => toast.dismiss(t.id)}
+                className="w-full rounded-md px-3 py-1 bg-gray-200 dark:bg-gray-600 text-sm"
+              >
+                Vazgeç
+              </button>
+              <button
+                onClick={() => {
+                  navigate('/giris');
+                  toast.dismiss(t.id);
+                }}
+                className="w-full rounded-md px-3 py-1 bg-violet-500 text-white text-sm"
+              >
+                Giriş Yap
+              </button>
+            </div>
+          </div>
+        ),
+        {
+          icon: '🔐',
+        }
+      );
+      return;
+    }
+
     if (isMyAd) {
       toast.error('Kendi ilanınıza katılamazsınız.');
       return;
     }
+
     joinAd(ad.id);
     toast.success('Etkinliğe katıldın!');
   };
@@ -39,7 +73,7 @@ export const AdCard: React.FC<AdCardProps> = ({ ad }) => {
 
   const handleCommentSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (comment.trim()) {
+    if (comment.trim() && currentUser) {
       setComments([...comments, { name: currentUser.name, text: comment }]);
       setComment('');
     }
@@ -139,16 +173,18 @@ export const AdCard: React.FC<AdCardProps> = ({ ad }) => {
         {/* Yorum Alanı */}
         {showComments && (
           <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700/50">
-            <form onSubmit={handleCommentSubmit} className="flex gap-2 mb-4">
-              <input
-                type="text"
-                value={comment}
-                onChange={e => setComment(e.target.value)}
-                placeholder="Yorum yaz..."
-                className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-full text-sm bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400"
-              />
-              <button type="submit" className="bg-gradient-to-r from-violet-500 to-amber-400 text-white px-4 py-1 rounded-full text-sm font-semibold hover:scale-105 transition">Gönder</button>
-            </form>
+            {currentUser && (
+              <form onSubmit={handleCommentSubmit} className="flex gap-2 mb-4">
+                <input
+                  type="text"
+                  value={comment}
+                  onChange={e => setComment(e.target.value)}
+                  placeholder="Yorum yaz..."
+                  className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-full text-sm bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400"
+                />
+                <button type="submit" className="bg-gradient-to-r from-violet-500 to-amber-400 text-white px-4 py-1 rounded-full text-sm font-semibold hover:scale-105 transition">Gönder</button>
+              </form>
+            )}
             <div className="mt-2 space-y-2">
               {comments.map((c, i) => (
                 <div key={i} className="flex items-start gap-2 text-sm bg-gray-50 dark:bg-gray-900/50 rounded-lg p-2">

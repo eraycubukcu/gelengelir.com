@@ -22,6 +22,16 @@ export interface Category {
   color: string;
 }
 
+export interface User {
+  name: string;
+  email: string;
+  password?: string; // Sadece mock auth için, normalde DB'de hash'lenir
+  avatar: string;
+  bio?: string;
+  instagram?: string;
+  twitter?: string;
+}
+
 export interface CreateAdForm {
   title: string;
   description: string;
