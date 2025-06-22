@@ -12,12 +12,13 @@ import { Register } from './pages/Register';
 import { Toaster } from 'react-hot-toast';
 import { useAdStore } from './store/useAdStore';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { ScrollToTop } from './components/ScrollToTop';
 
 // Layout for the main app pages with Header and Footer
 const MainLayout = () => (
   <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 text-gray-800 dark:text-gray-200 flex flex-col">
     <Header />
-    <main className="flex-grow container mx-auto px-4 py-8">
+    <main className="flex-grow container mx-auto px-4 py-8 pt-8">
       <Outlet />
     </main>
     <Footer />
@@ -59,6 +60,7 @@ function App() {
   return (
     <Router>
       <Toaster position="bottom-right" reverseOrder={false} />
+      <ScrollToTop />
       <AppRoutes />
     </Router>
   );

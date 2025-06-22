@@ -55,23 +55,23 @@ export const Register: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
-      <div className="animate-fade-in">
-        <div className="w-full max-w-md p-8 space-y-8 bg-white dark:bg-gray-800/50 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-700">
+    <div className="flex items-center justify-center min-h-[calc(100vh-200px)] px-4">
+      <div className="animate-fade-in w-full">
+        <div className="w-full max-w-md mx-auto p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 bg-white dark:bg-gray-800/50 rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-700">
           <div className="text-center">
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-violet-600 to-amber-500 bg-clip-text text-transparent">
+            <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-violet-600 to-amber-500 bg-clip-text text-transparent">
               Aramıza Katıl
             </h2>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">Yeni bir hesap oluştur ve topluluğa dahil ol.</p>
+            <p className="mt-2 text-sm sm:text-base text-gray-600 dark:text-gray-400">Yeni bir hesap oluştur ve topluluğa dahil ol.</p>
           </div>
-          <form className="mt-8 space-y-4" onSubmit={handleSubmit(onSubmit)}>
+          <form className="mt-6 sm:mt-8 space-y-3 sm:space-y-4" onSubmit={handleSubmit(onSubmit)}>
             <div>
               <div className="relative">
-                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-violet-400 w-5 h-5" />
+                <User className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-violet-400 w-4 h-4 sm:w-5 sm:h-5" />
                 <input
                   {...register('username')}
                   type="text"
-                  className={`w-full pl-12 pr-4 py-3 border rounded-xl bg-white dark:bg-gray-700/50 focus:ring-2 transition ${
+                  className={`w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 border rounded-xl bg-white dark:bg-gray-700/50 focus:ring-2 transition text-sm sm:text-base ${
                     errors.username ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 dark:border-gray-600 focus:ring-indigo-500 dark:focus:ring-indigo-400'
                   }`}
                   placeholder="Kullanıcı Adı"
@@ -81,11 +81,11 @@ export const Register: React.FC = () => {
             </div>
             <div>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-violet-400 w-5 h-5" />
+                <Mail className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-violet-400 w-4 h-4 sm:w-5 sm:h-5" />
                 <input
                   {...register('email')}
                   type="email"
-                  className={`w-full pl-12 pr-4 py-3 border rounded-xl bg-white dark:bg-gray-700/50 focus:ring-2 transition ${
+                  className={`w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 border rounded-xl bg-white dark:bg-gray-700/50 focus:ring-2 transition text-sm sm:text-base ${
                     errors.email ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 dark:border-gray-600 focus:ring-indigo-500 dark:focus:ring-indigo-400'
                   }`}
                   placeholder="E-posta"
@@ -95,11 +95,11 @@ export const Register: React.FC = () => {
             </div>
             <div>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-violet-400 w-5 h-5" />
+                <Lock className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-violet-400 w-4 h-4 sm:w-5 sm:h-5" />
                 <input
                   {...register('password')}
                   type="password"
-                  className={`w-full pl-12 pr-4 py-3 border rounded-xl bg-white dark:bg-gray-700/50 focus:ring-2 transition ${
+                  className={`w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 border rounded-xl bg-white dark:bg-gray-700/50 focus:ring-2 transition text-sm sm:text-base ${
                     errors.password ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 dark:border-gray-600 focus:ring-indigo-500 dark:focus:ring-indigo-400'
                   }`}
                   placeholder="Şifre"
@@ -109,11 +109,11 @@ export const Register: React.FC = () => {
             </div>
             <div>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-violet-400 w-5 h-5" />
+                <Lock className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-violet-400 w-4 h-4 sm:w-5 sm:h-5" />
                 <input
                   {...register('confirmPassword')}
                   type="password"
-                  className={`w-full pl-12 pr-4 py-3 border rounded-xl bg-white dark:bg-gray-700/50 focus:ring-2 transition ${
+                  className={`w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 border rounded-xl bg-white dark:bg-gray-700/50 focus:ring-2 transition text-sm sm:text-base ${
                     errors.confirmPassword ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 dark:border-gray-600 focus:ring-indigo-500 dark:focus:ring-indigo-400'
                   }`}
                   placeholder="Şifre Tekrar"
@@ -121,15 +121,15 @@ export const Register: React.FC = () => {
               </div>
               {errors.confirmPassword && <p className="text-red-500 text-xs mt-1 ml-1">{errors.confirmPassword.message}</p>}
             </div>
-            <div className="pt-2">
+            <div className="pt-1 sm:pt-2">
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-violet-600 to-amber-500 text-white px-8 py-3 rounded-xl font-semibold text-lg hover:shadow-lg hover:scale-105 transition disabled:opacity-75 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-violet-600 to-amber-500 text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl font-semibold text-base sm:text-lg hover:shadow-lg hover:scale-105 transition disabled:opacity-75 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
                   <>
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <svg className="animate-spin -ml-1 mr-3 h-4 w-4 sm:h-5 sm:w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
@@ -137,13 +137,13 @@ export const Register: React.FC = () => {
                   </>
                 ) : (
                   <>
-                    <UserPlus className="w-5 h-5" /> Kayıt Ol
+                    <UserPlus className="w-4 h-4 sm:w-5 sm:h-5" /> Kayıt Ol
                   </>
                 )}
               </button>
             </div>
           </form>
-          <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-center text-xs sm:text-sm text-gray-600 dark:text-gray-400">
             Zaten bir hesabın var mı?{' '}
             <Link to="/giris" className="font-medium text-violet-600 dark:text-violet-400 hover:underline">
               Giriş Yap
