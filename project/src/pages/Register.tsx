@@ -55,16 +55,16 @@ export const Register: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-200px)] px-4">
-      <div className="animate-fade-in w-full">
-        <div className="w-full max-w-md mx-auto p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 bg-white dark:bg-gray-800/50 rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-700">
+    <div className="flex items-center justify-center min-h-[calc(100vh-400px)] p-4 sm:p-6 lg:p-8 animate-fade-in-up">
+      <div className="animate-fade-in w-full max-w-md">
+        <div className="w-full p-4 sm:p-6 lg:p-8 space-y-3 sm:space-y-4 bg-white dark:bg-gray-800/50 rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-700">
           <div className="text-center">
             <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-violet-600 to-amber-500 bg-clip-text text-transparent">
               Aramıza Katıl
             </h2>
             <p className="mt-2 text-sm sm:text-base text-gray-600 dark:text-gray-400">Yeni bir hesap oluştur ve topluluğa dahil ol.</p>
           </div>
-          <form className="mt-6 sm:mt-8 space-y-3 sm:space-y-4" onSubmit={handleSubmit(onSubmit)}>
+          <form className="space-y-2.5 sm:space-y-3" onSubmit={handleSubmit(onSubmit)}>
             <div>
               <div className="relative">
                 <User className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-violet-400 w-4 h-4 sm:w-5 sm:h-5" />
@@ -121,7 +121,7 @@ export const Register: React.FC = () => {
               </div>
               {errors.confirmPassword && <p className="text-red-500 text-xs mt-1 ml-1">{errors.confirmPassword.message}</p>}
             </div>
-            <div className="pt-1 sm:pt-2">
+            <div>
               <button
                 type="submit"
                 disabled={isSubmitting}

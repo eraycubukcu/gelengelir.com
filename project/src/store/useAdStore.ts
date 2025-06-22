@@ -120,6 +120,70 @@ const mockAds: Advertisement[] = [
     authorAvatar: `https://ui-avatars.com/api/?name=Can+Y&background=10b981&color=fff`,
     createdAt: new Date('2025-01-13'),
     tags: ['Basketbol', 'Derbi', 'Ülker Arena']
+  },
+  {
+    id: '5',
+    title: 'Hafta Sonu Kamp ve Doğa Yürüyüşü',
+    description: 'Bolu, Yedigöller\'de hafta sonu kamp yapıp doğa yürüyüşü yapacağız. Doğayla iç içe olmak isteyenleri bekliyoruz.',
+    category: mockCategories[5], // Gezi
+    location: 'Yedigöller, Bolu',
+    date: '2026-07-10',
+    time: '09:00',
+    maxParticipants: 10,
+    currentParticipants: 6,
+    authorName: 'Selin G.',
+    authorContact: 'selin.gezi@email.com',
+    authorAvatar: 'https://ui-avatars.com/api/?name=Selin+G&background=059669&color=fff',
+    createdAt: new Date('2025-02-01'),
+    tags: ['Kamp', 'Doğa Yürüyüşü', 'Yedigöller']
+  },
+  {
+    id: '6',
+    title: 'Akustik Gitar Gecesi',
+    description: 'Evde toplandığımız, herkesin kendi enstrümanını getirip çaldığı bir müzik gecesi düzenliyoruz. Müzikseverler davetlidir!',
+    category: mockCategories[3], // Müzik
+    location: 'Beşiktaş, İstanbul',
+    date: '2026-06-15',
+    time: '20:00',
+    maxParticipants: 8,
+    currentParticipants: 8,
+    authorName: 'Barış T.',
+    authorContact: '@baristunc',
+    authorAvatar: 'https://ui-avatars.com/api/?name=Baris+T&background=2563eb&color=fff',
+    createdAt: new Date('2025-02-05'),
+    tags: ['Akustik', 'Gitar', 'Canlı Müzik']
+  },
+  {
+    id: '7',
+    title: 'Yeni İtalyan Restoranı Deneyimi',
+    description: 'Şehirdeki yeni açılan İtalyan restoranını denemek için bir grup oluşturuyoruz. Lezzetli makarnalar ve pizzalar bizi bekler!',
+    category: mockCategories[4], // Yemek
+    location: 'Karaköy, İstanbul',
+    date: '2026-06-20',
+    time: '19:30',
+    maxParticipants: 6,
+    currentParticipants: 5,
+    authorName: 'Deniz A.',
+    authorContact: 'deniz.foodie@email.com',
+    authorAvatar: 'https://ui-avatars.com/api/?name=Deniz+A&background=d97706&color=fff',
+    createdAt: new Date('2025-02-10'),
+    tags: ['İtalyan Mutfağı', 'Restoran', 'Gurme']
+  },
+  {
+    id: '8',
+    title: 'Geçmiş Etkinlik: Proje Sunumu Hazırlığı',
+    description: 'Final projemizin sunumu için pazar günü kütüphanede buluşup çalışacağız. Odaklanmış bir çalışma ortamı arayanlar katılabilir.',
+    category: mockCategories[6], // Çalışma
+    location: 'Milli Kütüphane, Ankara',
+    date: '2024-05-12',
+    time: '13:00',
+    maxParticipants: 4,
+    currentParticipants: 4,
+    authorName: 'Fatma Ö.',
+    authorContact: 'fatma.o@edu.tr',
+    authorAvatar: 'https://ui-avatars.com/api/?name=Fatma+O&background=4f46e5&color=fff',
+    createdAt: new Date('2024-05-01'),
+    tags: ['Ders', 'Proje', 'Kütüphane']
   }
 ];
 
