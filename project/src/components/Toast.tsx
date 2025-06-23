@@ -28,7 +28,3 @@ export const Toast: React.FC<ToastProps> = ({ message, type = 'success', onClose
     </div>
   );
 };
-
-// Animasyon için ek CSS:
-// .animate-fade-in-up { animation: fadeInUp 0.4s; }
-// @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } } 

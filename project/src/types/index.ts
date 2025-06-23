@@ -25,7 +25,7 @@ export interface Category {
 export interface User {
   name: string;
   email: string;
-  password?: string; // Sadece mock auth için, normalde DB'de hash'lenir
+  password?: string;
   avatar: string;
   bio?: string;
   instagram?: string;

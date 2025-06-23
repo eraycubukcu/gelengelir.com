@@ -236,8 +236,23 @@ export const useAdStore = create<AdStore>()(
             ad.tags.some(tag => tag.toLowerCase().includes(query))
           );
         }
-        
-        return filtered;
+
+        // Tarihe göre sırala ve geçmiş etkinlikleri sona al
+        const now = new Date();
+        return filtered.sort((a, b) => {
+          const aDate = new Date(`${a.date}T${a.time}`);
+          const bDate = new Date(`${b.date}T${b.time}`);
+          
+          // Geçmiş etkinlik kontrolü
+          const aIsPast = aDate < now;
+          const bIsPast = bDate < now;
+          
+          if (aIsPast && !bIsPast) return 1; // a geçmiş, b gelecek -> a sona
+          if (!aIsPast && bIsPast) return -1; // a gelecek, b geçmiş -> b sona
+          
+          // İkisi de geçmiş veya gelecek ise tarihe göre sırala
+          return aDate.getTime() - bDate.getTime();
+        });
       },
       
       joinAd: (adId) => {
@@ -291,10 +306,13 @@ export const useAdStore = create<AdStore>()(
         let idx = 1;
         for (const id of joinedAdIds) {
           if (id === adId) {
+            const currentUser = get().currentUser;
+            if (!currentUser) continue;
+            
             participants.push({
-              name: get().currentUser.name,
-              email: get().currentUser.email,
-              avatar: get().currentUser.avatar,
+              name: currentUser.name,
+              email: currentUser.email,
+              avatar: currentUser.avatar,
             });
             idx++;
           }
